@@ -23,9 +23,9 @@ public class UserCompanyTest {
     @Test
     public void testSave() {
         User user = new User();
-        user.setAge(2)
-                .setPassword("2")
-                .setUserName("2");
+        user.setAge(3)
+                .setPassword("3")
+                .setUserName("wms");
         Company inspur = new Company();
         inspur.setAddress("山东省济南市浪潮路3306")
                 .setName("浪潮软件")
@@ -69,5 +69,10 @@ public class UserCompanyTest {
     public void testFindSimple() {
         List<SimpleUser> simpleUsers = userRepository.findByUserName("3");
         simpleUsers.forEach(x-> System.out.println(x.getNameAndAge()));
+    }
+    @Test
+    public void testFindByPlace(){
+        List<String> simple = userRepository.findSimpleByWorkPlace("");
+        System.out.println(simple);
     }
 }
