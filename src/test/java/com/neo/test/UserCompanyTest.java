@@ -1,10 +1,11 @@
 package com.neo.test;
 
 import com.neo.model.Company;
+import com.neo.model.QUser;
 import com.neo.model.User;
 import com.neo.model.projection.SimpleUser;
 import com.neo.repository.UserRepository;
-import org.hibernate.criterion.Order;
+import com.querydsl.core.types.Predicate;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,14 +13,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.test.context.junit4.SpringRunner;
-import sun.tools.tree.BooleanExpression;
 
 import javax.transaction.Transactional;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Function;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -88,11 +86,16 @@ public class UserCompanyTest {
     public void testFindByAge() {
         PageRequest page = PageRequest.of(0, 10, Sort.by("age").descending());
         Page<User> userByAgeAfter = userRepository.findUserByAgeAfter(0, page);
-        userByAgeAfter.getContent().forEach(x-> System.out.println(x.getUserName()));
+        userByAgeAfter.getContent().forEach(x -> System.out.println(x.getUserName()));
     }
-    @Test
-    public void testQueryDsl(){
 
+    @Test
+    @Transactional
+    public void testQueryDsl() {
+        Predicate predicate = QUser.user.userName.equalsIgnoreCase("wms")
+                .and(QUser.user.userName.startsWithIgnoreCase("w"));
+        Iterable<User> all = userRepository.findAll(predicate);
+        all.forEach(System.out::println);
     }
 
 }
