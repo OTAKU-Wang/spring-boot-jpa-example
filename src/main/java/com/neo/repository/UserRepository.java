@@ -2,6 +2,9 @@ package com.neo.repository;
 
 import com.neo.model.User;
 import com.neo.model.projection.SimpleUser;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -57,4 +60,14 @@ public interface UserRepository extends JpaRepository<User, String> {
             "from jpa_user u join u.workCompanies c " +
             "where c.address like :#{#workPlace==null || #workPlace.isEmpty() ? '1=1' : '%'+#workPlace+'%' }")
     List<String> findSimpleByWorkPlace(String workPlace);
+
+    /**
+     * 分页查询
+     *
+     * @param age
+     * @param page
+     * @param sort
+     * @return
+     */
+    Page<User> findUserByAgeAfter(Integer age, Pageable page);
 }

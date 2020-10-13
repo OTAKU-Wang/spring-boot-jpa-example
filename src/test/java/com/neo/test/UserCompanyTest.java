@@ -4,10 +4,14 @@ import com.neo.model.Company;
 import com.neo.model.User;
 import com.neo.model.projection.SimpleUser;
 import com.neo.repository.UserRepository;
+import org.hibernate.criterion.Order;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.transaction.Transactional;
@@ -68,11 +72,19 @@ public class UserCompanyTest {
     @Test
     public void testFindSimple() {
         List<SimpleUser> simpleUsers = userRepository.findByUserName("3");
-        simpleUsers.forEach(x-> System.out.println(x.getNameAndAge()));
+        simpleUsers.forEach(x -> System.out.println(x.getNameAndAge()));
     }
+
     @Test
-    public void testFindByPlace(){
+    public void testFindByPlace() {
         List<String> simple = userRepository.findSimpleByWorkPlace("");
         System.out.println(simple);
+    }
+
+    @Test
+    public void testFindByAge() {
+        PageRequest page = PageRequest.of(0, 10, Sort.by("age").descending());
+        Page<User> userByAgeAfter = userRepository.findUserByAgeAfter(0, page);
+        userByAgeAfter.getContent().forEach(x-> System.out.println(x.getUserName()));
     }
 }
