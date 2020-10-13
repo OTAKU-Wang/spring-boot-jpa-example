@@ -1,9 +1,11 @@
 package com.neo.repository;
 
 import com.neo.model.User;
+import com.neo.model.projection.SimpleUser;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -31,4 +33,11 @@ public interface UserRepository extends JpaRepository<User, String> {
      */
     @Override
     void deleteById(String id);
+
+    /**
+     * 通过用户名获取用户的基本信息
+     * @param userName
+     * @return
+     */
+    List<SimpleUser> findByUserName(String userName);
 }

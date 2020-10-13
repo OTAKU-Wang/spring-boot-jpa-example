@@ -2,6 +2,7 @@ package com.neo.test;
 
 import com.neo.model.Company;
 import com.neo.model.User;
+import com.neo.model.projection.SimpleUser;
 import com.neo.repository.UserRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,7 +34,7 @@ public class UserCompanyTest {
         alibaba.setAddress("杭州余杭西溪园区")
                 .setName("阿里巴巴集团")
                 .setPhoneNum("186666666");
-        user.setWorkCompanies(Arrays.asList(inspur,alibaba));
+        user.setWorkCompanies(Arrays.asList(inspur, alibaba));
         userRepository.save(user);
     }
 
@@ -41,8 +42,8 @@ public class UserCompanyTest {
     public void testUpdate() {
         User user = userRepository.findAllByUserName("3").orElse(new User());
         List<Company> workCompanies = user.getWorkCompanies();
-        workCompanies.forEach(x->{
-            x.setName(x.getName()+System.nanoTime());
+        workCompanies.forEach(x -> {
+            x.setName(x.getName() + System.nanoTime());
         });
         user.setWorkCompanies(workCompanies);
         userRepository.save(user);
@@ -64,5 +65,11 @@ public class UserCompanyTest {
     public void testFind() {
         User user = userRepository.findById("1d401015-2143-4117-b776-5736648c7e6f").orElse(new User());
         System.out.println(user);
+    }
+
+    @Test
+    public void testFindSimple() {
+        List<SimpleUser> simpleUsers = userRepository.findByUserName("3");
+        simpleUsers.forEach(x-> System.out.println(x.getNameAndAge()));
     }
 }
