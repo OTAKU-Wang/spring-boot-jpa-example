@@ -42,9 +42,7 @@ public class UserCompanyTest {
     public void testUpdate() {
         User user = userRepository.findAllByUserName("3").orElse(new User());
         List<Company> workCompanies = user.getWorkCompanies();
-        workCompanies.forEach(x -> {
-            x.setName(x.getName() + System.nanoTime());
-        });
+        workCompanies.forEach(x -> x.setName(x.getName() + System.nanoTime()));
         user.setWorkCompanies(workCompanies);
         userRepository.save(user);
     }
