@@ -30,8 +30,7 @@ public class User {
     private String password;
     @Column(nullable = false)
     private int age;
-    @OneToMany(cascade = {CascadeType.MERGE,
-            CascadeType.PERSIST},orphanRemoval=true)
+    @OneToMany(cascade = {CascadeType.ALL})
     @JoinTable(name = "jpa_user_work_company", joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "company_id", referencedColumnName = "id")})
     private List<Company> workCompanies;
