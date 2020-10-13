@@ -66,7 +66,6 @@ public interface UserRepository extends JpaRepository<User, String> {
      *
      * @param age
      * @param page
-     * @param sort
      * @return
      */
     Page<User> findUserByAgeAfter(Integer age, Pageable page);
