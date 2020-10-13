@@ -12,11 +12,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.test.context.junit4.SpringRunner;
+import sun.tools.tree.BooleanExpression;
 
 import javax.transaction.Transactional;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Function;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -87,4 +90,9 @@ public class UserCompanyTest {
         Page<User> userByAgeAfter = userRepository.findUserByAgeAfter(0, page);
         userByAgeAfter.getContent().forEach(x-> System.out.println(x.getUserName()));
     }
+    @Test
+    public void testQueryDsl(){
+
+    }
+
 }
