@@ -13,8 +13,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 import java.util.Arrays;
 import java.util.List;
@@ -94,7 +98,18 @@ public class UserCompanyTest {
     public void testQueryDsl() {
         Predicate predicate = QUser.user.userName.equalsIgnoreCase("wms")
                 .and(QUser.user.userName.startsWithIgnoreCase("w"));
-        Iterable<User> all = userRepository.findAll(predicate);
+        Iterable<User> all = userRepository.findAll();
+        all.forEach(System.out::println);
+    }
+    @Test
+    @Transactional
+    public void testSpecification(){
+        Specification<User> sp= (Specification<User>) (root, query, cb) -> cb.lessThanOrEqualTo(root.get("age"), 3);
+        Specification<User> sp1= (Specification<User>) (root, query, cb) -> {
+            Root<Company> companyRoot = query.from(Company.class);
+            return cb.like(companyRoot.get("name"),"%阿里%");
+        };
+        List<User> all = userRepository.findAll(sp1);
         all.forEach(System.out::println);
     }
 
