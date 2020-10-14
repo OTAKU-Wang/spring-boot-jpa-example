@@ -20,6 +20,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -104,12 +105,15 @@ public class UserCompanyTest {
     @Test
     @Transactional
     public void testSpecification(){
-        Specification<User> sp= (Specification<User>) (root, query, cb) -> cb.lessThanOrEqualTo(root.get("age"), 3);
-        Specification<User> sp1= (Specification<User>) (root, query, cb) -> {
+        List<javax.persistence.criteria.Predicate> predicatesList = new ArrayList<>();
+        Specification<User> sp= (Specification<User>) (root, query, cb) -> {
             Root<Company> companyRoot = query.from(Company.class);
-            return cb.like(companyRoot.get("name"),"%阿里%");
+            predicatesList.add(cb.like(companyRoot.get("name"), "%阿里%"));
+            predicatesList.add(cb.lessThanOrEqualTo(root.get("age"),2));
+            javax.persistence.criteria.Predicate[] predicates = new javax.persistence.criteria.Predicate[predicatesList.size()];
+            return cb.and(predicatesList.toArray(predicates));
         };
-        List<User> all = userRepository.findAll(sp1);
+        List<User> all = userRepository.findAll(sp);
         all.forEach(System.out::println);
     }
 
