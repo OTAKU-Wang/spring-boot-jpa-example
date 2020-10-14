@@ -102,14 +102,15 @@ public class UserCompanyTest {
         Iterable<User> all = userRepository.findAll();
         all.forEach(System.out::println);
     }
+
     @Test
     @Transactional
-    public void testSpecification(){
+    public void testSpecification() {
         List<javax.persistence.criteria.Predicate> predicatesList = new ArrayList<>();
-        Specification<User> sp= (Specification<User>) (root, query, cb) -> {
+        Specification<User> sp = (Specification<User>) (root, query, cb) -> {
             Root<Company> companyRoot = query.from(Company.class);
             predicatesList.add(cb.like(companyRoot.get("name"), "%阿里%"));
-            predicatesList.add(cb.lessThanOrEqualTo(root.get("age"),2));
+            predicatesList.add(cb.lessThanOrEqualTo(root.get("age"), 2));
             javax.persistence.criteria.Predicate[] predicates = new javax.persistence.criteria.Predicate[predicatesList.size()];
             return cb.and(predicatesList.toArray(predicates));
         };
